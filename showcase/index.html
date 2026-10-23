@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bastion — playable ad demo</title>
+  <meta name="description" content="2D tower-defense playable ad on PixiJS, built to an explicit OOP canon: single HTML per ad network, size and FPS budgets." />
+  <link rel="stylesheet" href="showcase.css" />
+</head>
+<body>
+  <main class="layout">
+    <section class="device-col">
+      <div class="device" data-orientation="portrait">
+        <iframe id="playable" title="Bastion playable" src="play/preview/index.html" allow="autoplay"></iframe>
+      </div>
+      <div class="controls">
+        <div class="segmented" role="group" aria-label="Orientation">
+          <button data-orientation="portrait" aria-pressed="true">Portrait</button>
+          <button data-orientation="landscape" aria-pressed="false">Landscape</button>
+        </div>
+        <button id="restart">Restart</button>
+        <label class="toggle"><input id="debug" type="checkbox" /> Perf overlay</label>
+      </div>
+      <p id="events" class="events" aria-live="polite">Tap a stone spot to build a tower.</p>
+    </section>
+
+    <section class="info">
+      <h1>Bastion <span>playable ad demo · PixiJS · tower defense</span></h1>
+      <p class="lead">A 30-second tower defense: build archer, cannon and frost towers on stone spots along a winding road, upgrade them with gold from kills, and hold the castle against three waves and a boss. Everything — art, effects, sound — is generated in code, so each network build is a single self-contained HTML file.</p>
+
+      <h2>Builds</h2>
+      <table>
+        <thead><tr><th>Network</th><th>Single HTML</th><th>gzip</th><th>Budget</th><th></th></tr></thead>
+        <tbody id="builds"><tr><td colspan="5">Loading…</td></tr></tbody>
+      </table>
+      <p class="note">Each build ships exactly one adapter: <code>FbPlayableAd.onCTAClick()</code> for Meta, <code>ExitApi.exit()</code> for Google, <code>mraid.open()</code> with ready/viewable handling for MRAID networks (Unity Ads, AppLovin…). The build fails if a file exceeds the budget or references anything external.</p>
+
+      <h2>Under the hood</h2>
+      <ul>
+        <li><b>A core that knows nothing about rendering.</b> Road, waves, creeps, towers, gold, castle and the ad scenario are plain JS; a test greps the core for Pixi, DOM and network calls, and a whole battle is replayed in Node without a single sprite.</li>
+        <li><b>Entities with doors.</b> Gold can't go negative, a spot holds one tower, a dead creep can't be hit — every write returns <code>{ ok, code, detail }</code> and a refusal changes nothing.</li>
+        <li><b>Variants by replacing a node.</b> Targeting (first on the road, first un-chilled) and impact (single, splash, chill) are small objects named in a table; a new tower is a config row, not a branch.</li>
+        <li><b>One observation channel.</b> The core announces milestones; HUD, sound, sparks, tutorial and the network adapter subscribe in one place at the assembly point.</li>
+        <li><b>Zero allocations in the frame loop.</b> Projectiles live in a slot pool backed by typed arrays; creep sprites are leased from a pool and returned after their death animation.</li>
+      </ul>
+
+      <p class="links">
+        <a href="https://github.com/s-afanasiev/bastion-td-playable">Source on GitHub</a>
+        <a href="play/preview/index.html?debug" target="_blank" rel="noopener">Open full screen with perf overlay</a>
+        <a href="https://s-afanasiev.github.io/">All projects →</a>
+      </p>
+    </section>
+  </main>
+  <script src="showcase.js"></script>
+</body>
+</html>

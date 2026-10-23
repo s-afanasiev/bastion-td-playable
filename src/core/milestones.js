@@ -14,15 +14,18 @@
 //   action.refused  { code, detail }            отказ двери на действие игрока
 //   menu.opened     { spot, options }  menu.closed {}   — от интерфейса, для подсказок
 export class Milestones {
-  #listeners = new Set();
+  // Копия при записи: подписка и отписка редки и создают новый массив, emit на горячем пути перебирает
+  // текущий массив индексом без аллокаций, а отписка посреди обхода его не ломает.
+  #listeners = [];
 
   // Подписка и отписка — пара у одного владельца (П39).
   subscribe(listener) {
-    this.#listeners.add(listener);
-    return () => this.#listeners.delete(listener);
+    this.#listeners = [...this.#listeners, listener];
+    return () => { this.#listeners = this.#listeners.filter((l) => l !== listener); };
   }
 
   emit(event) {
-    for (const listener of this.#listeners) listener(event);
+    const listeners = this.#listeners;
+    for (let i = 0; i < listeners.length; i++) listeners[i](event);
   }
 }

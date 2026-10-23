@@ -20,8 +20,14 @@ export function createNetwork({ storeUrl }) {
       else whenViewable();
     }),
     onVisibility: (fn) => {
-      mraid()?.addEventListener('viewableChange', (viewable) => fn(Boolean(viewable)));
-      document.addEventListener('visibilitychange', () => fn(!document.hidden));
+      const onViewable = (viewable) => fn(Boolean(viewable));
+      const onPage = () => fn(!document.hidden);
+      mraid()?.addEventListener('viewableChange', onViewable);
+      document.addEventListener('visibilitychange', onPage);
+      return () => { // выход — пара ко входу
+        mraid()?.removeEventListener('viewableChange', onViewable);
+        document.removeEventListener('visibilitychange', onPage);
+      };
     },
     openStore: () => (mraid() ? mraid().open(storeUrl) : window.open(storeUrl, '_blank')),
     gameEnd: () => {},

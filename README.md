@@ -28,7 +28,7 @@ A hand points at a stone spot → a radial menu offers **archer**, **cannon** an
 
 | | |
 |---|---|
-| **Single HTML** | Script and styles inlined; the build fails on any external `src`/`href`. ~558 KB raw, ~163 KB gzip — budget 700 KB. |
+| **Single HTML** | Script and styles inlined; the build fails on any external `src`/`href`. ~559 KB raw, ~163 KB gzip — budget 700 KB. |
 | **Network adapters** | One adapter per build: Meta `FbPlayableAd.onCTAClick()`, Google `ExitApi.exit()`, MRAID `mraid.open()` with `ready` / `viewableChange` handling, and a preview build. |
 | **Ad lifecycle** | Starts after the network is ready; pause/resume of ticker and audio when the ad is hidden; audio unlocked on first tap; fits a 720×1280 logical field into any screen. |
 | **Frame budget** | `?debug` overlay: FPS, worst frame, visible objects, creeps, towers, pool usage, JS heap. |

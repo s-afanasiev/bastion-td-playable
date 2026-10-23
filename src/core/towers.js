@@ -86,7 +86,8 @@ export class Tower {
 // Реестр башен по площадкам (П11: поиск сущностей — отдельный реестр). Инвариант: одна башня на площадку.
 export class Towers {
   #spots;
-  #bySpot = new Map();
+  #bySpot = new Map(); // поиск по площадке
+  #list = []; // перебор в кадре — индексом по массиву, без итератора Map
   #nextId = 1;
 
   constructor(spots) {
@@ -116,10 +117,11 @@ export class Towers {
     if (!verdict.ok) return verdict;
     const tower = new Tower(this.#nextId++, this.#spots[spotId], kind);
     this.#bySpot.set(spotId, tower);
+    this.#list.push(tower);
     return { ok: true, tower };
   }
 
   forEach(fn) {
-    for (const tower of this.#bySpot.values()) fn(tower);
+    for (let i = 0; i < this.#list.length; i++) fn(this.#list[i]);
   }
 }

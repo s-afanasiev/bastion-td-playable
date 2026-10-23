@@ -4,7 +4,11 @@ export function createNetwork() {
   return {
     name: 'meta',
     ready: () => Promise.resolve(),
-    onVisibility: (fn) => document.addEventListener('visibilitychange', () => fn(!document.hidden)),
+    onVisibility: (fn) => {
+      const listener = () => fn(!document.hidden);
+      document.addEventListener('visibilitychange', listener);
+      return () => document.removeEventListener('visibilitychange', listener); // выход — пара ко входу
+    },
     openStore: () => window.FbPlayableAd?.onCTAClick(),
     gameEnd: () => {},
   };

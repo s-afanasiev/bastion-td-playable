@@ -4,6 +4,7 @@
 export class Playable {
   #d;
   #stopped = false;
+  #offVisibility = () => {};
 
   constructor({ network, stage, battle, layers, views, tutorial, synth, debug }) {
     this.#d = { network, stage, battle, layers, views, tutorial, synth, debug };
@@ -12,7 +13,7 @@ export class Playable {
   run() {
     const { network, stage, layers } = this.#d;
     stage.world.addChild(...layers);
-    network.onVisibility((visible) => (visible ? this.resume() : this.pause()));
+    this.#offVisibility = network.onVisibility((visible) => (visible ? this.resume() : this.pause()));
     stage.run(this.#frame);
     return this;
   }
@@ -32,6 +33,7 @@ export class Playable {
   stop() {
     if (this.#stopped) return;
     this.#stopped = true;
+    this.#offVisibility();
     this.#d.synth.suspend();
     this.#d.stage.stop();
   }

@@ -72,7 +72,7 @@ export class Creeps {
 
   get walkingCount() {
     let n = 0;
-    for (const c of this.all) if (c.walking) n++;
+    for (let i = 0; i < this.all.length; i++) if (this.all[i].walking) n++;
     return n;
   }
 
@@ -84,13 +84,13 @@ export class Creeps {
   }
 
   advance(dt, now, onBreach) {
-    for (const c of this.all) if (c.advance(dt, now)) onBreach(c);
+    for (let i = 0; i < this.all.length; i++) if (this.all[i].advance(dt, now)) onBreach(this.all[i]);
   }
 
   // Отжившие уходят из списка на месте, без нового массива.
   sweep() {
     let w = 0;
-    for (const c of this.all) if (c.walking) this.all[w++] = c;
+    for (let i = 0; i < this.all.length; i++) if (this.all[i].walking) this.all[w++] = this.all[i];
     this.all.length = w;
   }
 }
